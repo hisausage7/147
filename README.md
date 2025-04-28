@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="zh-Hant">
   <head>
-    <mete name="viewport" content="width=devic-width,initial-scale=1.0">
     <meta charset="UTF-8" />
     <title>147測驗</title>
     <style>
@@ -10,13 +9,11 @@
         background: #f0f4f8;
         margin: 0;
         padding: 40px;
-        font-size: 1.2em;
+        font-size: 1.6em;
       }
       #container {
-        width: 95%;
-        max-width: 1000px;
+        max-width: 1200px;
         margin: auto;
-        padding: 10px;
         background: #fff;
         padding: 40px;
         border-radius: 20px;
@@ -144,6 +141,10 @@
         </div>
         <div class="question" id="questionText"></div>
         <div class="options" id="options"></div>
+        <button id="prevBtn" class="btn" style="background: #6c757d">
+          上一題 / Previous
+        </button>
+
         <button id="leaveBtn" class="btn">離開考試 / Leave Quiz</button>
       </div>
 
@@ -164,11 +165,18 @@
           id="scoreSummary"
           style="text-align: center; margin-top: 20px; font-size: 1.2em"
         ></div>
-        <div style=
       </div>
     </div>
 
     <script>
+      document.getElementById("prevBtn").onclick = () => {
+        if (current > 0) {
+          current-- // 題目數減一
+          answers.pop() // 把最後一次作答紀錄取消
+          showQ() // 顯示上一題
+        }
+      }
+
       // (這裡放剛剛的完整questions陣列)
       const questions = [
         {
@@ -475,7 +483,7 @@
           question:
             "The effective coils number of spring is the total number of coils minus the number of end coil. Is the above description true?",
           options: ["A. Yes", "B. No", "C. Not related"],
-          answer: "B",
+          answer: "A",
         },
         {
           question:
@@ -994,104 +1002,126 @@
         },
       ]
 
-      // 接下來的控制邏輯
-      function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1))
-          ;[array[i], array[j]] = [array[j], array[i]]
-        }
-        return array
-      }
+     // 接下來的控制邏輯
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
+}
 
-      let shuffledQuestions = shuffle([...questions])
-      let current = 0,
-        total = shuffledQuestions.length,
-        timer = 80 * 60,
-        interval,
-        answers = []
+let shuffledQuestions = shuffle([...questions])
+let current = 0,
+  total = shuffledQuestions.length,
+  timer = 80 * 60,
+  interval,
+  answers = []
 
-      document.getElementById("total").innerText = total
+document.getElementById("total").innerText = total
 
-      function fmtTime(s) {
-        const m = Math.floor(s / 60)
-          .toString()
-          .padStart(2, "0")
-        const sec = (s % 60).toString().padStart(2, "0")
-        return m + ":" + sec
-      }
+function fmtTime(s) {
+  const m = Math.floor(s / 60)
+    .toString()
+    .padStart(2, "0")
+  const sec = (s % 60).toString().padStart(2, "0")
+  return m + ":" + sec
+}
 
-      document.getElementById("startBtn").onclick = () => {
-        const n = document.getElementById("nameInput").value.trim()
-        if (!n) return alert("請輸入姓名 / Enter your name")
-        document.getElementById("welcome").classList.add("hidden")
-        document.getElementById("quiz").classList.remove("hidden")
-        document.getElementById("welcomeName").innerText = "歡迎: " + n
-        interval = setInterval(() => {
-          timer--
-          document.getElementById("timer").innerText = fmtTime(timer)
-          if (timer <= 0) finish()
-        }, 1000)
-        showQ()
-      }
+document.getElementById("startBtn").onclick = () => {
+  const n = document.getElementById("nameInput").value.trim()
+  if (!n) return alert("請輸入姓名 / Enter your name")
+  document.getElementById("welcome").classList.add("hidden")
+  document.getElementById("quiz").classList.remove("hidden")
+  document.getElementById("welcomeName").innerText = "歡迎: " + n
+  interval = setInterval(() => {
+    timer--
+    document.getElementById("timer").innerText = fmtTime(timer)
+    if (timer <= 0) finish()
+  }, 1000)
+  showQ()
+}
 
-      document.getElementById("leaveBtn").onclick = finish
+document.getElementById("leaveBtn").onclick = finish
 
-      function showQ() {
-        if (current >= total) return finish()
-        document.getElementById("current").innerText = current + 1
-        const q = shuffledQuestions[current]
-        document.getElementById("questionText").innerText = q.question
-        const optDiv = document.getElementById("options")
-        optDiv.innerHTML = ""
-        q.options.forEach((o) => {
-          const lbl = document.createElement("label")
-          const rd = document.createElement("input")
-          rd.type = "radio"
-          rd.name = "opt"
-          rd.value = o.charAt(0)
-          rd.onchange = () => {
-            answers.push({ q, choice: rd.value })
-            current++
-            showQ()
-          }
-          lbl.append(rd, " ", o)
-          optDiv.append(lbl)
-        })
-      }
+// 新增上一題功能
+document.getElementById("prevBtn").onclick = () => {
+  if (current > 0) {
+    current--;
+    answers.pop();
+    showQ();
+  }
+}
 
-      function finish() {
-        clearInterval(interval)
-        document.getElementById("quiz").classList.add("hidden")
-        const tb = document.getElementById("resultsBody")
-        tb.innerHTML = ""
-        let correct = 0
-        answers.forEach((a) => {
-          const tr = document.createElement("tr")
+function showQ() {
+  if (current >= total) return finish()
+  document.getElementById("current").innerText = current + 1
+  const q = shuffledQuestions[current]
+  document.getElementById("questionText").innerText = q.question
+  const optDiv = document.getElementById("options")
+  optDiv.innerHTML = ""
 
-          const selectedOption = a.q.options.find((opt) =>
-            opt.startsWith(a.choice),
-          )
-          const correctOption = a.q.options.find((opt) =>
-            opt.startsWith(a.q.answer),
-          )
+  // 把選項包成 {text, isAnswer} 格式
+  let optionsWithFlag = q.options.map((option) => ({
+    text: option,
+    isAnswer: option.charAt(0) === q.answer,
+  }))
 
-          tr.innerHTML = `
+  // 打亂選項
+  for (let i = optionsWithFlag.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[optionsWithFlag[i], optionsWithFlag[j]] = [
+      optionsWithFlag[j],
+      optionsWithFlag[i],
+    ]
+  }
+
+  // 顯示打亂後的選項
+  optionsWithFlag.forEach((opt) => {
+    const lbl = document.createElement("label")
+    const rd = document.createElement("input")
+    rd.type = "radio"
+    rd.name = "opt"
+    rd.value = opt.text  // 注意這裡記錄的是完整文字
+    rd.onchange = () => {
+      answers.push({ 
+        q, 
+        selectedText: opt.text, 
+        correctText: q.options.find(optItem => optItem.charAt(0) === q.answer),
+        correct: opt.isAnswer 
+      })
+      current++
+      showQ()
+    }
+    lbl.append(rd, " ", opt.text)
+    optDiv.append(lbl)
+  })
+}
+
+function finish() {
+  clearInterval(interval)
+  document.getElementById("quiz").classList.add("hidden")
+  const tb = document.getElementById("resultsBody")
+  tb.innerHTML = ""
+  let correct = 0
+  answers.forEach((a) => {
+    const tr = document.createElement("tr")
+    tr.innerHTML = `
       <td>${a.q.question}</td>
-      <td>${selectedOption || a.choice}</td>
-      <td>${correctOption || a.q.answer}</td>
-    `
+      <td>${a.selectedText}</td>
+      <td>${a.correctText}</td>
+      <td>${a.correct ? "O" : "X"}</td>
+    `;
+    if (a.correct) correct++
+    tb.append(tr)
+  })
 
-          const td = document.createElement("td")
-          td.classList.add("status")
-          td.innerText = a.choice === a.q.answer ? "O" : "X" // <== 就是這裡直接O/X
-          if (a.choice === a.q.answer) correct++
-          tr.append(td)
-          tb.append(tr)
-        })
-        document.getElementById("scoreSummary").innerText =
-          `答對 ${correct} 題 / 已作答${answers.length} / 共 ${total} 題`;
-        document.getElementById("results").classList.remove("hidden")
-      }
+  document.getElementById("scoreSummary").innerText =
+    `答對 ${correct} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`
+  document.getElementById("results").classList.remove("hidden")
+}
+
+
     </script>
   </body>
 </html>
