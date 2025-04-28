@@ -164,8 +164,6 @@
           id="scoreSummary"
           style="text-align: center; margin-top: 20px; font-size: 1.2em"
         ></div>=test-align: center;">
-        <button id="restarBtn" class="btn" style="background:
-        #28a745; margin-top: 20px;">重新開始 / Restart<button>
         <div style=
       </div>
     </div>
