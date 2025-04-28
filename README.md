@@ -483,7 +483,7 @@
           question:
             "The effective coils number of spring is the total number of coils minus the number of end coil. Is the above description true?",
           options: ["A. Yes", "B. No", "C. Not related"],
-          answer: "A",
+          answer: "B",
         },
         {
           question:
