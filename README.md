@@ -1,182 +1,128 @@
 <!doctype html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <title>147測驗</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background: #f0f4f8;
-        margin: 0;
-        padding: 40px;
-        font-size: 1.6em;
-      }
-      #container {
-        max-width: 1200px;
-        margin: auto;
-        background: #fff;
-        padding: 40px;
-        border-radius: 20px;
-      }
-      .hidden {
-        display: none;
-      }
-      h1,
-      h2 {
-        text-align: center;
-        color: #333;
-        font-size: 2.4em;
-      }
-      #rules {
-        background: #e9ecef;
-        padding: 20px;
-        margin-bottom: 40px;
-        border-radius: 10px;
-        font-size: 1.2em;
-      }
-      .btn {
-        background: #007bff;
-        color: #fff;
-        border: none;
-        padding: 20px 40px;
-        margin: 10px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 1.2em;
-      }
-      .btn:hover {
-        background: #0056b3;
-      }
-      #leaveBtn {
-        background: #dc3545;
-      }
-      #progress,
-      #timer {
-        font-weight: bold;
-        font-size: 1.4em;
-      }
-      .question {
-        margin: 40px 0 20px;
-        font-size: 1.8em;
-      }
-      .options label {
-        display: block;
-        margin-bottom: 16px;
-        font-size: 1.4em;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 40px;
-        font-size: 1.2em;
-      }
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 16px;
-        text-align: left;
-      }
-      .status img {
-        width: 30px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container">
-      <div id="welcome">
-        <h1>147測驗</h1>
-        <div id="rules">
-          <p><strong>考試注意事項 / Exam Rules:</strong></p>
-          <p>
-            !!!建議使用電腦版網頁模式!!! /It is recommended to use the desktop
-            web mode
-          </p>
-
-          <p>
-            1. 請輸入姓名後才能開始作答。 / You must enter your name to start
-            the quiz.
-          </p>
-          <p>
-            2. 選擇答案後即視為作答完成，無法修改。 / Selecting an option will
-            immediately submit your answer, no changes allowed.
-          </p>
-          <p>
-            3. 考試限時80分鐘，自動倒數。 / The quiz is timed for 80 minutes,
-            countdown starts immediately.
-          </p>
-          <p>
-            4. 作答途中可隨時點擊「離開考試」提前結束。 / You can click "Leave
-            Quiz" anytime to finish early.
-          </p>
-          <p>
-            5. 完成後會自動顯示所有答題結果與成績。 / Results and scores will be
-            displayed after completion.
-          </p>
-          <p>
-            6. 答對題目顯示O，答錯題目顯示X。 / Correct answers will show O,
-            incorrect answers will show X.
-          </p>
-        </div>
-        <input
-          type="text"
-          id="nameInput"
-          placeholder="輸入姓名 / Enter your name"
-          style="
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            font-size: 1.4em;
-          "
-        />
-        <button id="startBtn" class="btn">開始測驗 / Start Quiz</button>
+<head>
+  <meta charset="UTF-8" />
+  <title>147測驗</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 40px;
+      font-size: 1.6em;
+    }
+    #container {
+      max-width: 1200px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+    }
+    .hidden { display: none; }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+      font-size: 2.4em;
+    }
+    #rules {
+      background: #e9ecef;
+      padding: 20px;
+      margin-bottom: 40px;
+      border-radius: 10px;
+      font-size: 1.2em;
+    }
+    .btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 20px 40px;
+      margin: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+    #leaveBtn {
+      background: #dc3545;
+    }
+    #progress, #timer {
+      font-weight: bold;
+      font-size: 1.4em;
+    }
+    .question {
+      margin: 40px 0 20px;
+      font-size: 1.8em;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 16px;
+      font-size: 1.4em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 40px;
+      font-size: 1.2em;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 16px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="welcome">
+      <h1>147測驗</h1>
+      <div id="rules">
+        <p><strong>考試注意事項 / Exam Rules:</strong></p>
+        <p>1. 請輸入姓名後才能開始作答。 / You must enter your name to start the quiz.</p>
+        <p>2. 選擇答案後即視為作答完成，無法修改。 / Selecting an option will immediately submit your answer, no changes allowed.</p>
+        <p>3. 考試限時80分鐘，自動倒數。 / The quiz is timed for 80 minutes, countdown starts immediately.</p>
+        <p>4. 作答途中可隨時點擊「離開考試」提前結束。 / You can click "Leave Quiz" anytime to finish early.</p>
+        <p>5. 完成後會自動顯示所有答題結果與成績。 / Results and scores will be displayed after completion.</p>
+        <p>6. 答對題目顯示O，答錯題目顯示X。 / Correct answers will show O, incorrect answers will show X.</p>
       </div>
-
-      <div id="quiz" class="hidden">
-        <div>
-          <span id="welcomeName"></span>
-          <span id="timer" style="float: right">80:00</span>
-        </div>
-        <div id="progress">
-          題數: <span id="current">0</span> / <span id="total">0</span>
-        </div>
-        <div class="question" id="questionText"></div>
-        <div class="options" id="options"></div>
-        <button id="prevBtn" class="btn" style="background: #6c757d">
-          上一題 / Previous
-        </button>
-
-        <button id="leaveBtn" class="btn">離開考試 / Leave Quiz</button>
-      </div>
-
-      <div id="results" class="hidden">
-        <h2>測驗結果 / Results</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>題目</th>
-              <th>您的答案</th>
-              <th>正確答案</th>
-              <th>結果</th>
-            </tr>
-          </thead>
-          <tbody id="resultsBody"></tbody>
-        </table>
-        <div
-          id="scoreSummary"
-          style="text-align: center; margin-top: 20px; font-size: 1.2em"
-        ></div>
-      </div>
+      <input type="text" id="nameInput" placeholder="輸入姓名 / Enter your name" style="width: 100%; padding: 8px; margin-bottom: 10px; font-size: 1.4em;" />
+      <input type="number" id="questionLimit" placeholder="輸入題數 / Enter number of questions" style="width: 100%; padding: 8px; margin-bottom: 10px; font-size: 1.4em;" />
+      <button id="startBtn" class="btn">開始測驗 / Start Quiz</button>
     </div>
 
-    <script>
-      document.getElementById("prevBtn").onclick = () => {
-        if (current > 0) {
-          current-- // 題目數減一
-          answers.pop() // 把最後一次作答紀錄取消
-          showQ() // 顯示上一題
-        }
-      }
+    <div id="quiz" class="hidden">
+      <div>
+        <span id="welcomeName"></span>
+        <span id="timer" style="float: right;">80:00</span>
+      </div>
+      <div id="progress">
+        題數: <span id="current">0</span> / <span id="total">0</span>
+      </div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+      <button id="prevBtn" class="btn" style="background: #6c757d">上一題 / Previous</button>
+      <button id="leaveBtn" class="btn">離開考試 / Leave Quiz</button>
+    </div>
 
+    <div id="results" class="hidden">
+      <h2>測驗結果 / Results</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>題目</th>
+            <th>您的答案</th>
+            <th>正確答案</th>
+            <th>結果</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+      <div id="scoreSummary" style="text-align: center; margin-top: 20px; font-size: 1.2em"></div>
+    </div> }
+  </div> }
+  
+<script>
       // (這裡放剛剛的完整questions陣列)
       const questions = [
         {
@@ -1004,124 +950,110 @@
 
      // 接下來的控制邏輯
 function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-  return array
-}
-
-let shuffledQuestions = shuffle([...questions])
-let current = 0,
-  total = shuffledQuestions.length,
-  timer = 80 * 60,
-  interval,
-  answers = []
-
-document.getElementById("total").innerText = total
-
-function fmtTime(s) {
-  const m = Math.floor(s / 60)
-    .toString()
-    .padStart(2, "0")
-  const sec = (s % 60).toString().padStart(2, "0")
-  return m + ":" + sec
-}
-
-document.getElementById("startBtn").onclick = () => {
-  const n = document.getElementById("nameInput").value.trim()
-  if (!n) return alert("請輸入姓名 / Enter your name")
-  document.getElementById("welcome").classList.add("hidden")
-  document.getElementById("quiz").classList.remove("hidden")
-  document.getElementById("welcomeName").innerText = "歡迎: " + n
-  interval = setInterval(() => {
-    timer--
-    document.getElementById("timer").innerText = fmtTime(timer)
-    if (timer <= 0) finish()
-  }, 1000)
-  showQ()
-}
-
-document.getElementById("leaveBtn").onclick = finish
-
-// 新增上一題功能
-document.getElementById("prevBtn").onclick = () => {
-  if (current > 0) {
-    current--;
-    answers.pop();
-    showQ();
-  }
-}
-
-function showQ() {
-  if (current >= total) return finish()
-  document.getElementById("current").innerText = current + 1
-  const q = shuffledQuestions[current]
-  document.getElementById("questionText").innerText = q.question
-  const optDiv = document.getElementById("options")
-  optDiv.innerHTML = ""
-
-  // 把選項包成 {text, isAnswer} 格式
-  let optionsWithFlag = q.options.map((option) => ({
-    text: option,
-    isAnswer: option.charAt(0) === q.answer,
-  }))
-
-  // 打亂選項
-  for (let i = optionsWithFlag.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[optionsWithFlag[i], optionsWithFlag[j]] = [
-      optionsWithFlag[j],
-      optionsWithFlag[i],
-    ]
-  }
-
-  // 顯示打亂後的選項
-  optionsWithFlag.forEach((opt) => {
-    const lbl = document.createElement("label")
-    const rd = document.createElement("input")
-    rd.type = "radio"
-    rd.name = "opt"
-    rd.value = opt.text  // 注意這裡記錄的是完整文字
-    rd.onchange = () => {
-      answers.push({ 
-        q, 
-        selectedText: opt.text, 
-        correctText: q.options.find(optItem => optItem.charAt(0) === q.answer),
-        correct: opt.isAnswer 
-      })
-      current++
-      showQ()
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
-    lbl.append(rd, " ", opt.text)
-    optDiv.append(lbl)
-  })
-}
 
-function finish() {
-  clearInterval(interval)
-  document.getElementById("quiz").classList.add("hidden")
-  const tb = document.getElementById("resultsBody")
-  tb.innerHTML = ""
-  let correct = 0
-  answers.forEach((a) => {
-    const tr = document.createElement("tr")
-    tr.innerHTML = `
-      <td>${a.q.question}</td>
-      <td>${a.selectedText}</td>
-      <td>${a.correctText}</td>
-      <td>${a.correct ? "O" : "X"}</td>
-    `;
-    if (a.correct) correct++
-    tb.append(tr)
-  })
+    let shuffledQuestions;
+    let current = 0, total = 0, timer = 80 * 60, interval, answers = [];
 
-  document.getElementById("scoreSummary").innerText =
-    `答對 ${correct} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`
-  document.getElementById("results").classList.remove("hidden")
-}
+    function fmtTime(s) {
+      const m = Math.floor(s / 60).toString().padStart(2, "0");
+      const sec = (s % 60).toString().padStart(2, "0");
+      return m + ":" + sec;
+    }
 
+    document.getElementById("startBtn").onclick = () => {
+      const n = document.getElementById("nameInput").value.trim();
+      const qLimit = parseInt(document.getElementById("questionLimit").value);
 
-    </script>
-  </body>
+      if (!n) return alert("請輸入姓名 / Enter your name");
+      if (!qLimit || qLimit <= 0) return alert("請輸入要作答的題數 / Enter number of questions");
+
+      shuffledQuestions = shuffle([...questions]).slice(0, qLimit);
+      total = shuffledQuestions.length;
+
+      document.getElementById("welcome").classList.add("hidden");
+      document.getElementById("quiz").classList.remove("hidden");
+      document.getElementById("welcomeName").innerText = "歡迎: " + n;
+      document.getElementById("total").innerText = total;
+
+      interval = setInterval(() => {
+        timer--;
+        document.getElementById("timer").innerText = fmtTime(timer);
+        if (timer <= 0) finish();
+      }, 1000);
+
+      showQ();
+    };
+
+    document.getElementById("prevBtn").onclick = () => {
+      if (current > 0) {
+        current--;
+        answers.pop();
+        showQ();
+      }
+    };
+
+    document.getElementById("leaveBtn").onclick = finish;
+
+    function showQ() {
+      if (current >= total) return finish();
+      document.getElementById("current").innerText = current + 1;
+      const q = shuffledQuestions[current];
+      document.getElementById("questionText").innerText = q.question;
+      const optDiv = document.getElementById("options");
+      optDiv.innerHTML = "";
+
+      let optionsWithFlag = q.options.map((option) => ({
+        text: option,
+        isAnswer: option.charAt(0) === q.answer,
+      }));
+
+      optionsWithFlag = shuffle(optionsWithFlag);
+
+      optionsWithFlag.forEach((opt) => {
+        const lbl = document.createElement("label");
+        const rd = document.createElement("input");
+        rd.type = "radio";
+        rd.name = "opt";
+        rd.value = opt.text;
+        rd.onchange = () => {
+          answers.push({ q, selectedText: opt.text, correctText: q.options.find(optItem => optItem.charAt(0) === q.answer), correct: opt.isAnswer });
+          current++;
+          showQ();
+        };
+        lbl.append(rd, " ", opt.text);
+        optDiv.append(lbl);
+      });
+    }
+
+    function finish() {
+      clearInterval(interval);
+      document.getElementById("quiz").classList.add("hidden");
+      const tb = document.getElementById("resultsBody");
+      tb.innerHTML = "";
+      let correct = 0;
+
+      answers.forEach((a) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${a.q.question}</td>
+          <td>${a.selectedText}</td>
+          <td>${a.correctText}</td>
+          <td>${a.correct ? "O" : "X"}</td>
+        `;
+        if (a.correct) correct++;
+        tb.append(tr);
+      });
+
+      document.getElementById("scoreSummary").innerText =
+        `答對 ${correct} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`;
+      document.getElementById("results").classList.remove("hidden");
+    }
+  </script>
+</body>
 </html>
