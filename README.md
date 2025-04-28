@@ -1088,7 +1088,7 @@
           tb.append(tr)
         })
         document.getElementById("scoreSummary").innerText =
-          `答對 ${correct} 題 /已作答${answers.length}/ 共 ${total} 題`
+          `答對 ${correct} 題 /已作答${answers.length}/ 共 ${total} 題`;
         document.getElementById("results").classList.remove("hidden")
       }
     </script>
