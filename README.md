@@ -119,8 +119,8 @@
         <tbody id="resultsBody"></tbody>
       </table>
       <div id="scoreSummary" style="text-align: center; margin-top: 20px; font-size: 1.2em"></div>
-    </div> }
-  </div> }
+    </div> 
+  </div> 
   
 <script>
       // (這裡放剛剛的完整questions陣列)
