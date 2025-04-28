@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
@@ -149,24 +150,28 @@
       </div>
 
       <div id="results" class="hidden">
-        <h2>測驗結果 / Results</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>題目</th>
-              <th>您的答案</th>
-              <th>正確答案</th>
-              <th>結果</th>
-            </tr>
-          </thead>
-          <tbody id="resultsBody"></tbody>
-        </table>
-        <div
-          id="scoreSummary"
-          style="text-align: center; margin-top: 20px; font-size: 1.2em"
-        ></div>
-      </div>
-    </div>
+  <h2>測驗結果 / Results</h2>
+  
+  <div id="resultButtons" style="text-align: center; margin-bottom: 20px;">
+    <button id="showWrongBtn" class="btn">只顯示錯題 / Show Wrong</button>
+    <button id="showAllBtn" class="btn">顯示全部 / Show All</button>
+    <button id="restartBtn" class="btn" style="background: #28a745;">重新開始 / Restart</button>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>題目</th>
+        <th>您的答案</th>
+        <th>正確答案</th>
+        <th>結果</th>
+      </tr>
+    </thead>
+    <tbody id="resultsBody"></tbody>
+  </table>
+
+  <div id="scoreSummary" style="text-align: center; margin-top: 20px; font-size: 1.2em"></div>
+</div>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -1009,160 +1014,151 @@
         ]
 
         function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            ;[array[i], array[j]] = [array[j], array[i]]
+          }
+          return array
+        }
 
-  let shuffledQuestions;
-  let current = 0, total = 0, timer = 80 * 60, interval, answers = [];
+        let shuffledQuestions
+        let current = 0,
+          total = 0,
+          timer = 80 * 60,
+          interval,
+          answers = []
 
-  function fmtTime(s) {
-    const m = Math.floor(s / 60).toString().padStart(2, "0");
-    const sec = (s % 60).toString().padStart(2, "0");
-    return m + ":" + sec;
-  }
+        function fmtTime(s) {
+          const m = Math.floor(s / 60)
+            .toString()
+            .padStart(2, "0")
+          const sec = (s % 60).toString().padStart(2, "0")
+          return m + ":" + sec
+        }
 
-  const startBtn = document.getElementById("startBtn");
-  const prevBtn = document.getElementById("prevBtn");
-  const leaveBtn = document.getElementById("leaveBtn");
+        document.getElementById("startBtn").onclick = () => {
+          const n = document.getElementById("nameInput").value.trim()
+          const qLimit = parseInt(
+            document.getElementById("questionLimit").value,
+          )
 
-  startBtn.addEventListener('click', () => {
-    const n = document.getElementById("nameInput").value.trim();
-    const qLimit = parseInt(document.getElementById("questionLimit").value);
+          if (!n) return alert("請輸入姓名 / Enter your name")
+          if (!qLimit || qLimit <= 0)
+            return alert(
+              "請輸入要作答的題數,最多105題 / Enter number of questions",
+            )
 
-    if (!n) return alert("請輸入姓名 / Enter your name");
-    if (!qLimit || qLimit <= 0) return alert("請輸入要作答的題數,最多105題 / Enter number of questions");
+          shuffledQuestions = shuffle([...questions]).slice(0, qLimit)
+          total = shuffledQuestions.length
 
-    shuffledQuestions = shuffle([...questions]).slice(0, qLimit);
-    total = shuffledQuestions.length;
+          document.getElementById("welcome").classList.add("hidden")
+          document.getElementById("quiz").classList.remove("hidden")
+          document.getElementById("welcomeName").innerText = "歡迎: " + n
+          document.getElementById("total").innerText = total
 
-    document.getElementById("welcome").classList.add("hidden");
-    document.getElementById("quiz").classList.remove("hidden");
-    document.getElementById("welcomeName").innerText = "歡迎: " + n;
-    document.getElementById("total").innerText = total;
+          timer = 80 * 60
+          interval = setInterval(() => {
+            if (timer > 0) {
+              timer--
+              document.getElementById("timer").innerText = fmtTime(timer)
+            } else {
+              clearInterval(interval)
+              finish()
+            }
+          }, 1000)
 
-    interval = setInterval(() => { 
-      if (timer > 0) {
-        timer--;
-        document.getElementById("timer").innerText = fmtTime(timer);
-      } else {
-        clearInterval(interval);
-        finish();
-      }
-    }, 1000);
+          showQ()
+        }
 
-    showQ();
+        document.getElementById("prevBtn").onclick = () => {
+          if (current > 0) {
+            current--
+            answers.pop()
+            showQ()
+          }
+        }
+
+        document.getElementById("leaveBtn").onclick = finish
+
+        function showQ() {
+          if (current >= total) return finish()
+          document.getElementById("current").innerText = current + 1
+          const q = shuffledQuestions[current]
+          document.getElementById("questionText").innerText = q.question
+          const optDiv = document.getElementById("options")
+          optDiv.innerHTML = ""
+
+          let optionsWithFlag = q.options.map((option) => ({
+            text: option,
+            isAnswer: option.charAt(0) === q.answer,
+          }))
+
+          optionsWithFlag = shuffle(optionsWithFlag)
+
+          optionsWithFlag.forEach((opt) => {
+            const lbl = document.createElement("label")
+            const rd = document.createElement("input")
+            rd.type = "radio"
+            rd.name = "opt"
+            rd.value = opt.text
+            rd.onchange = () => {
+              answers.push({
+                q,
+                selectedText: opt.text,
+                correctText: q.options.find(
+                  (optItem) => optItem.charAt(0) === q.answer,
+                ),
+                correct: opt.isAnswer,
+              })
+              current++
+              showQ()
+            }
+            lbl.append(rd, " ", opt.text)
+            optDiv.append(lbl)
+          })
+        }
+
+        function finish() {
+          clearInterval(interval)
+          document.getElementById("quiz").classList.add("hidden")
+          renderResults()
+          document.getElementById("results").classList.remove("hidden")
+          window.scrollTo({ top: 0, behavior: "smooth" })
+        }
+  document.getElementById("showWrongBtn").onclick = () => renderResults(true);
+  document.getElementById("showAllBtn").onclick = () => renderResults(false);
+  document.getElementById("restartBtn").onclick = () => location.reload();
+
+
+        function renderResults(showWrongOnly = false) {
+  const tb = document.getElementById("resultsBody");
+  tb.innerHTML = "";  // 只清空 tbody，不影響外面的按鈕
+
+  let correct = 0;
+  answers.forEach(a => {
+    if (showWrongOnly && a.correct) return;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${a.q.question}</td>
+      <td>${a.selectedText}</td>
+      <td>${a.correctText}</td>
+      <td>${a.correct ? "O" : "X"}</td>
+    `;
+    if (!a.correct) tr.classList.add("wrong");
+    if (a.correct) correct++;
+    tb.append(tr);
   });
 
-  prevBtn.addEventListener('click', () => {
-    if (current > 0) {
-      current--;
-      answers.pop();
-      showQ();
-    }
-  });
+  document.getElementById("scoreSummary").innerText =
+    `答對 ${correct} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`;
+}
 
-  leaveBtn.addEventListener('click', finish);
-
-  function showQ() {
-    if (current >= total) return finish();
-    document.getElementById("current").innerText = current + 1;
-    const q = shuffledQuestions[current];
-    document.getElementById("questionText").innerText = q.question;
-    const optDiv = document.getElementById("options");
-    optDiv.innerHTML = "";
-
-    let optionsWithFlag = q.options.map(option => ({
-      text: option,
-      isAnswer: option.charAt(0) === q.answer,
-    }));
-
-    optionsWithFlag = shuffle(optionsWithFlag);
-
-    optionsWithFlag.forEach(opt => {
-      const lbl = document.createElement("label");
-      const rd = document.createElement("input");
-      rd.type = "radio";
-      rd.name = "opt";
-      rd.value = opt.text;
-      rd.onchange = () => {
-        answers.push({ 
-          q, 
-          selectedText: opt.text, 
-          correctText: q.options.find(optItem => optItem.charAt(0) === q.answer), 
-          correct: opt.isAnswer 
-        });
-        current++;
-        showQ();
-      };
-      lbl.append(rd, " ", opt.text);
-      optDiv.append(lbl);
-    });
-  }
-
-  function renderResults(filterWrongOnly = false) {
-    const tb = document.getElementById("resultsBody");
-    tb.innerHTML = "";
-    let correct = 0;
-
-    answers.forEach(a => {
-      if (filterWrongOnly && a.correct) return; // 只顯示錯的
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${a.q.question}</td>
-        <td>${a.selectedText}</td>
-        <td>${a.correctText}</td>
-        <td>${a.correct ? "O" : "X"}</td>
-      `;
-      if (!a.correct) {
-        tr.classList.add("wrong");
-      }
-      if (a.correct) correct++;
-      tb.append(tr);
-    });
-
-    document.getElementById("scoreSummary").innerText =
-      `答對 ${correct} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`;
-  }
-
-  function finish() {
-    clearInterval(interval);
-    document.getElementById("quiz").classList.add("hidden");
-    document.getElementById("results").classList.remove("hidden");
-    renderResults(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-    // 加上新的控制按鈕
-    const resultsDiv = document.getElementById("results");
-    if (!document.getElementById("buttonsArea")) {
-      const btnArea = document.createElement("div");
-      btnArea.id = "buttonsArea";
-      btnArea.style.marginTop = "20px";
-      btnArea.style.textAlign = "center";
-
-      const showAllBtn = document.createElement("button");
-      showAllBtn.innerText = "顯示全部答題情況";
-      showAllBtn.className = "btn";
-      showAllBtn.onclick = () => renderResults(false);
-
-      const showWrongBtn = document.createElement("button");
-      showWrongBtn.innerText = "只顯示錯誤題目";
-      showWrongBtn.className = "btn";
-      showWrongBtn.onclick = () => renderResults(true);
-
-      const restartBtn = document.createElement("button");
-      restartBtn.innerText = "重新開始";
-      restartBtn.className = "btn";
-      restartBtn.onclick = () => location.reload();
-
-      btnArea.append(showAllBtn, showWrongBtn, restartBtn);
-      resultsDiv.append(btnArea);
-    }
-  }
-});
-</script>
-</body>
+        document.getElementById("showWrongBtn").onclick = () =>
+          renderResults(true)
+        document.getElementById("showAllBtn").onclick = () =>
+          renderResults(false)
+        document.getElementById("restartBtn").onclick = () => location.reload()
+      })
+    </script>
+  </body>
 </html>
