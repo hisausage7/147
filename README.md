@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
@@ -6,13 +5,18 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        background: #f0f4f8;
         margin: 0;
         padding: 40px;
         font-size: 1.6em;
+        background: #f0f4f8;
+        color: #000;
         transition:
-          background 0.3s,
-          color 0.3s;
+          background-color 0.5s,
+          color 0.5s;
+      }
+      body.dark {
+        background: #121212;
+        color: #fff;
       }
       #container {
         max-width: 1200px;
@@ -20,7 +24,13 @@
         background: #fff;
         padding: 40px;
         border-radius: 20px;
-        transition: background 0.3s;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      body.dark #container {
+        background: #1e1e1e;
       }
       .hidden {
         display: none;
@@ -28,7 +38,6 @@
       h1,
       h2 {
         text-align: center;
-        color: #333;
         font-size: 2.4em;
       }
       #rules {
@@ -37,6 +46,9 @@
         margin-bottom: 40px;
         border-radius: 10px;
         font-size: 1.2em;
+      }
+      body.dark #rules {
+        background: #333;
       }
       .btn {
         background: #007bff;
@@ -47,6 +59,7 @@
         border-radius: 10px;
         cursor: pointer;
         font-size: 1.2em;
+        transition: background-color 0.3s;
       }
       .btn:hover {
         background: #0056b3;
@@ -59,10 +72,25 @@
         font-weight: bold;
         font-size: 1.4em;
       }
+      .progress-container {
+        background: #ddd;
+        height: 10px;
+        border-radius: 5px;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+      body.dark .progress-container {
+        background: #555;
+      }
+      .progress-bar {
+        height: 100%;
+        width: 0;
+        background: #007bff;
+        transition: width 0.6s ease;
+      }
       .question {
         margin: 40px 0 20px;
         font-size: 1.8em;
-        color: #000;
       }
       .options label {
         display: block;
@@ -84,33 +112,30 @@
       tr.wrong {
         background-color: #ffe6e6;
       }
-      .progress-bar-container {
-        background-color: #ddd;
-        border-radius: 10px;
-        overflow: hidden;
-        height: 20px;
-        margin-top: 10px;
+      body.dark tr.wrong {
+        background-color: #661111;
       }
-      .progress-bar {
-        height: 100%;
-        width: 0%;
-        background-color: #28a745;
-        transition: width 0.3s;
-      }
-      /* 暗色模式 */
-      body.dark {
-        background: #222;
-        color: #eee;
-      }
-      body.dark #container {
+      #darkModeToggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
         background: #333;
-      }
-      body.dark .question {
         color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background 0.3s;
+      }
+      #darkModeToggle:hover {
+        background: #555;
       }
     </style>
   </head>
+
   <body>
+    <button id="darkModeToggle">深色模式 / Dark Mode</button>
     <div id="container">
       <div id="welcome">
         <h1>147測驗</h1>
@@ -160,9 +185,6 @@
           "
         />
         <button id="startBtn" class="btn">開始測驗 / Start Quiz</button>
-        <button id="toggleThemeBtn" class="btn" style="background: #6c757d">
-          切換暗色模式
-        </button>
       </div>
 
       <div id="quiz" class="hidden">
@@ -172,9 +194,9 @@
         </div>
         <div id="progress">
           題數: <span id="current">0</span> / <span id="total">0</span>
-          <div class="progress-bar-container">
-            <div id="progressBar" class="progress-bar"></div>
-          </div>
+        </div>
+        <div class="progress-container">
+          <div id="progressBar" class="progress-bar"></div>
         </div>
         <div class="question" id="questionText"></div>
         <div class="options" id="options"></div>
@@ -186,6 +208,13 @@
 
       <div id="results" class="hidden">
         <h2>測驗結果 / Results</h2>
+        <div>
+          <button id="retryBtn" class="btn">重新開始 / Retry</button>
+          <button id="showWrongBtn" class="btn" style="background: #ffc107">
+            只看錯題 / Wrong Only
+          </button>
+          <button id="showAllBtn" class="btn">看全部結果 / Show All</button>
+        </div>
         <table>
           <thead>
             <tr>
@@ -201,35 +230,6 @@
           id="scoreSummary"
           style="text-align: center; margin-top: 20px; font-size: 1.2em"
         ></div>
-        <div style="text-align: center; margin-top: 20px">
-          <button id="retryBtn" class="btn">重新開始 / Retry</button>
-          <button id="showWrongBtn" class="btn">
-            只看錯題 / Show Wrong Only
-          </button>
-          <button id="showAllBtn" class="btn">查看全部 / Show All</button>
-          <button id="leaderboardBtn" class="btn">
-            查看排行榜 / Leaderboard
-          </button>
-        </div>
-      </div>
-
-      <div id="leaderboardPage" class="hidden">
-        <h2>排行榜 / Leaderboard</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>名次</th>
-              <th>姓名</th>
-              <th>答對/作答題數</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboardBody"></tbody>
-        </table>
-        <div style="text-align: center; margin-top: 20px">
-          <button id="backToResultsBtn" class="btn">
-            返回結果 / Back to Results
-          </button>
-        </div>
       </div>
     </div>
 
@@ -259,7 +259,7 @@
           },
           {
             question:
-              "Which following item is correct that describe the hardness tester (1)Brinell hardness tester uses a hardened spherical ball, which is forced into the surface of the metal. (2)Vickers hardness tester uses a 136 square pyramid indenter, which is forced into the surface of the sample.",
+              "Which following item is correct that describe the hardness tester (1)Brinell hardness tester uses a hardened spherical ball, which is forced into the surface of the metal. (2)Vickers hardness tester uses a 136 square pyramid indente, which is forced into the surface of the sample.",
             options: [
               "A. Only (1) is correct",
               "B. Only (2) is correct",
@@ -1087,8 +1087,6 @@
           timer = 80 * 60,
           interval,
           answers = []
-        let playerName = ""
-        let leaderboard = []
 
         function fmtTime(s) {
           const m = Math.floor(s / 60)
@@ -1101,20 +1099,19 @@
         const startBtn = document.getElementById("startBtn")
         const prevBtn = document.getElementById("prevBtn")
         const leaveBtn = document.getElementById("leaveBtn")
-        const toggleThemeBtn = document.getElementById("toggleThemeBtn")
         const retryBtn = document.getElementById("retryBtn")
         const showWrongBtn = document.getElementById("showWrongBtn")
         const showAllBtn = document.getElementById("showAllBtn")
-        const leaderboardBtn = document.getElementById("leaderboardBtn")
-        const backToResultsBtn = document.getElementById("backToResultsBtn")
+        const darkModeToggle = document.getElementById("darkModeToggle")
+        const progressBar = document.getElementById("progressBar")
 
         startBtn.addEventListener("click", () => {
-          playerName = document.getElementById("nameInput").value.trim()
+          const n = document.getElementById("nameInput").value.trim()
           const qLimit = parseInt(
             document.getElementById("questionLimit").value,
           )
 
-          if (!playerName) return alert("請輸入姓名 / Enter your name")
+          if (!n) return alert("請輸入姓名 / Enter your name")
           if (!qLimit || qLimit <= 0)
             return alert(
               "請輸入要作答的題數,最多105題 / Enter number of questions",
@@ -1128,9 +1125,9 @@
 
           document.getElementById("welcome").classList.add("hidden")
           document.getElementById("quiz").classList.remove("hidden")
-          document.getElementById("welcomeName").innerText =
-            "歡迎: " + playerName
+          document.getElementById("welcomeName").innerText = "歡迎: " + n
           document.getElementById("total").innerText = total
+          updateProgress()
 
           interval = setInterval(() => {
             if (timer > 0) {
@@ -1154,42 +1151,19 @@
         })
 
         leaveBtn.addEventListener("click", finish)
-
-        toggleThemeBtn.addEventListener("click", () => {
-          document.body.classList.toggle("dark")
-        })
-
-        retryBtn.addEventListener("click", () => {
-          location.reload()
-        })
-
-        showWrongBtn.addEventListener("click", () => {
-          renderResults(true)
-        })
-
-        showAllBtn.addEventListener("click", () => {
-          renderResults(false)
-        })
-
-        leaderboardBtn.addEventListener("click", () => {
-          document.getElementById("results").classList.add("hidden")
-          document.getElementById("leaderboardPage").classList.remove("hidden")
-          renderLeaderboard()
-        })
-
-        backToResultsBtn.addEventListener("click", () => {
-          document.getElementById("leaderboardPage").classList.add("hidden")
-          document.getElementById("results").classList.remove("hidden")
-        })
+        retryBtn.addEventListener("click", () => location.reload())
+        showWrongBtn.addEventListener("click", filterResultsWrong)
+        showAllBtn.addEventListener("click", showAllResults)
+        darkModeToggle.addEventListener("click", () =>
+          document.body.classList.toggle("dark"),
+        )
 
         function showQ() {
           if (current >= total) return finish()
           document.getElementById("current").innerText = current + 1
-          document.getElementById("progressBar").style.width =
-            (current / total) * 100 + "%"
-
+          updateProgress()
           const q = shuffledQuestions[current]
-          document.getElementById("questionText").innerHTML = q.question
+          document.getElementById("questionText").innerText = q.question
           const optDiv = document.getElementById("options")
           optDiv.innerHTML = ""
 
@@ -1223,63 +1197,46 @@
           })
         }
 
+        function updateProgress() {
+          const percent = (current / total) * 100
+          progressBar.style.width = percent + "%"
+        }
+
         function finish() {
           clearInterval(interval)
           document.getElementById("quiz").classList.add("hidden")
           document.getElementById("results").classList.remove("hidden")
-          document.getElementById("progressBar").style.width = "100%"
-
-          let correct = 0
-          answers.forEach((a) => {
-            if (a.correct) correct++
-          })
-
-          leaderboard.push({
-            name: playerName,
-            score: correct,
-            total: answers.length,
-          })
-          leaderboard.sort((a, b) => b.score - a.score)
-          if (leaderboard.length > 5) leaderboard = leaderboard.slice(0, 5)
-
-          renderResults(false)
-        }
-
-        function renderResults(showWrongOnly) {
-          const tb = document.getElementById("resultsBody")
-          tb.innerHTML = ""
-          let correct = 0
-          answers.forEach((a) => {
-            if (showWrongOnly && a.correct) return
-            const tr = document.createElement("tr")
-            tr.innerHTML = `
-      <td>${a.q.question}</td>
-      <td>${a.selectedText}</td>
-      <td>${a.correctText}</td>
-      <td>${a.correct ? "O" : "X"}</td>
-    `
-            if (!a.correct) tr.classList.add("wrong")
-            if (a.correct) correct++
-            tb.append(tr)
-          })
-
+          renderResults(answers)
           document.getElementById("scoreSummary").innerText =
-            `答對 ${correct} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`
+            `答對 ${answers.filter((a) => a.correct).length} 題 / 已作答 ${answers.length} 題 / 共 ${total} 題`
           window.scrollTo({ top: 0, behavior: "smooth" })
         }
 
-        function renderLeaderboard() {
-          const lb = document.getElementById("leaderboardBody")
-          lb.innerHTML = ""
-          leaderboard.forEach((entry, idx) => {
+        function renderResults(data) {
+          const tb = document.getElementById("resultsBody")
+          tb.innerHTML = ""
+          data.forEach((a) => {
             const tr = document.createElement("tr")
             tr.innerHTML = `
-      <td>${idx + 1}</td>
-      <td>${entry.name}</td>
-      <td>${entry.score} / ${entry.total}</td>
-    `
-            lb.append(tr)
+        <td>${a.q.question}</td>
+        <td>${a.selectedText}</td>
+        <td>${a.correctText}</td>
+        <td>${a.correct ? "O" : "X"}</td>
+      `
+            if (!a.correct) {
+              tr.classList.add("wrong")
+            }
+            tb.append(tr)
           })
+        }
+
+        function filterResultsWrong() {
+          const wrongAnswers = answers.filter((a) => !a.correct)
+          renderResults(wrongAnswers)
+        }
+
+        function showAllResults() {
+          renderResults(answers)
         }
       })
     </script>
