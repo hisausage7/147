@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="zh-Hant">
   <head>
+    <mete name="viewport" content="width=devic-width,initial-scale=1.0">
     <meta charset="UTF-8" />
     <title>147測驗</title>
     <style>
