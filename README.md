@@ -79,15 +79,14 @@
       <h1>147測驗</h1>
       <div id="rules">
         <p><strong>考試注意事項 / Exam Rules:</strong></p>
-        <p>1. 請輸入姓名後才能開始作答。 / You must enter your name to start the quiz.</p>
-        <p>2. 選擇答案後即視為作答完成，無法修改。 / Selecting an option will immediately submit your answer, no changes allowed.</p>
-        <p>3. 考試限時80分鐘，自動倒數。 / The quiz is timed for 80 minutes, countdown starts immediately.</p>
-        <p>4. 作答途中可隨時點擊「離開考試」提前結束。 / You can click "Leave Quiz" anytime to finish early.</p>
-        <p>5. 完成後會自動顯示所有答題結果與成績。 / Results and scores will be displayed after completion.</p>
-        <p>6. 答對題目顯示O，答錯題目顯示X。 / Correct answers will show O, incorrect answers will show X.</p>
+        <p>1. 請輸入姓名後才能開始作答。 / You must enter your name to start the quiz.</p>    
+        <p>2. 考試限時80分鐘，自動倒數。 / The quiz is timed for 80 minutes, countdown starts immediately.</p>
+        <p>3. 作答途中可隨時點擊「離開考試」提前結束。 / You can click "Leave Quiz" anytime to finish early.</p>
+        <p>4. 完成後會自動顯示所有答題結果與成績。 / Results and scores will be displayed after completion.</p>
+        <p>5. 答對題目顯示O，答錯題目顯示X。 / Correct answers will show O, incorrect answers will show X.</p>
       </div>
       <input type="text" id="nameInput" placeholder="輸入姓名 / Enter your name" style="width: 100%; padding: 8px; margin-bottom: 10px; font-size: 1.4em;" />
-      <input type="number" id="questionLimit" placeholder="輸入題數 / Enter number of questions" style="width: 100%; padding: 8px; margin-bottom: 10px; font-size: 1.4em;" />
+      <input type="number" id="questionLimit" placeholder="輸入題數,至多105題 / Enter number of questions" style="width: 100%; padding: 8px; margin-bottom: 10px; font-size: 1.4em;" />
       <button id="startBtn" class="btn">開始測驗 / Start Quiz</button>
     </div>
 
@@ -971,7 +970,7 @@ function shuffle(array) {
       const qLimit = parseInt(document.getElementById("questionLimit").value);
 
       if (!n) return alert("請輸入姓名 / Enter your name");
-      if (!qLimit || qLimit <= 0) return alert("請輸入要作答的題數 / Enter number of questions");
+      if (!qLimit || qLimit <= 0) return alert("請輸入要作答的題數,最多105題 / Enter number of questions");
 
       shuffledQuestions = shuffle([...questions]).slice(0, qLimit);
       total = shuffledQuestions.length;
