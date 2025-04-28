@@ -10,12 +10,13 @@
         background: #f0f4f8;
         margin: 0;
         padding: 40px;
-        font-size: 1.6em;
+        font-size: 1.2em;
       }
       #container {
-        width: 90%;
-        max-width: 800px;
+        width: 95%;
+        max-width: 1000px;
         margin: auto;
+        padding: 10px;
         background: #fff;
         padding: 40px;
         border-radius: 20px;
