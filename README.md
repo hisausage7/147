@@ -163,7 +163,7 @@
         <div
           id="scoreSummary"
           style="text-align: center; margin-top: 20px; font-size: 1.2em"
-        ></div>=test-align: center;">
+        ></div>
         <div style=
       </div>
     </div>
