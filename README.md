@@ -1160,5 +1160,3 @@
         document.getElementById("restartBtn").onclick = () => location.reload()
       })
     </script>
-  </body>
-</html>
