@@ -142,6 +142,8 @@
         <div id="rules">
           <p><strong>考試注意事項 / Exam Rules:</strong></p>
           <p>
+            *謝謝各位的捧場，祝我們在147-004班相見*
+          <p>
             1. 請輸入姓名後才能開始作答。 / You must enter your name to start
             the quiz.
           </p>
